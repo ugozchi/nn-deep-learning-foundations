@@ -84,8 +84,8 @@
     "C": 0.0001,
     "val_accuracy": 0.35555555555555557,
     "n_params": 3845,
-    "train_time_s": 0.012933958088979125,
-    "inference_ms_per_image": 0.03433297388255596
+    "train_time_s": 0.01175050000892952,
+    "inference_ms_per_image": 0.028124995878897607
   },
   "logreg_histograms": {
     "accuracy": 0.39555555555555555,
@@ -131,7 +131,7 @@
     "C": 1,
     "val_accuracy": 0.44,
     "n_params": 125,
-    "train_time_s": 0.236339750001207,
-    "inference_ms_per_image": 0.33437495585530996
+    "train_time_s": 0.19093695899937302,
+    "inference_ms_per_image": 0.26129149773623794
   }
 }
