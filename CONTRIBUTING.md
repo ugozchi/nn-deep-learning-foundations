@@ -19,7 +19,7 @@ We are three on the final project. `main` must always run: **every change goes t
    ```
    Types: `feat`, `fix`, `exp` (experiment / results), `refactor`, `docs`, `chore`.
 4. **Open a pull request** (a draft early is fine) and link the issue with `Closes #5`.
-5. **One teammate reviews** before merging. Merges are **squash merges**, so `main` gets one clean commit per PR; the branch is deleted automatically.
+5. **Ask a teammate for a review**, especially when the PR changes shared code in `src/`. It is not required to merge, so the deadline never waits on a review. Merges are **squash merges**, so `main` gets one clean commit per PR; the branch is deleted automatically.
 
 ## Rules of thumb
 
