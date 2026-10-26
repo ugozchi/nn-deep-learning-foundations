@@ -54,7 +54,7 @@ HOW IT WORKS (and why)
    crop to size x size unless --no-crop) and save them as JPEG.
 
 Typical cost (5-8 classes x 300 images): 4-10 shards, i.e. 2-5 GB streamed (a few minutes on Colab,
-10-40 min on a home connection), peak RAM about 1.5 GB, output about 5 MB per 1 000 images at 128 px.
+up to about 1h30 on a home connection), peak RAM about 1.5 GB, output about 5 MB per 1 000 images at 128 px.
 Measured plans with the defaults: 5 genres (portrait, landscape, cityscape, still_life,
 religious_painting) -> 5 shards (~2.3 GB); 6 frequent styles -> 4 shards (~1.9 GB); 5 contrasted styles
 (Impressionism, Baroque, Cubism, Ukiyo_e, Pop_Art) -> 9 shards (~4.2 GB). Always --dry-run first.

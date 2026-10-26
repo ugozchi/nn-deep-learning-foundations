@@ -39,7 +39,7 @@ The data comes from the `huggan/wikiart` dataset on the Hugging Face Hub, throug
 
 We classify paintings by **style**, with five visually contrasted movements: **Impressionism, Baroque, Cubism, Ukiyo-e and Pop Art**, 300 images each, 128 × 128 px. Style is what the guide needs to tell the story of a movement. These five differ in palette, brushwork and composition, so the task can be learnt from 1 500 images, and there is still room for a gap between a classical model and a CNN.
 
-Build it from `Final Project/` (about 4.2 GB streamed, 10 to 40 minutes, re-running resumes):
+Build it from `Final Project/` (about 4.2 GB streamed, up to about 1h30 on a home connection, re-running resumes):
 
 ```bash
 pip install -r requirements.txt
@@ -49,3 +49,5 @@ python make_wikiart_subset.py --label style \
 ```
 
 The seed and the dataset revision are pinned, so everybody gets the same images. Check that your `data/wikiart_style5/subset_info.json` has the same `counts` and `shards` as the committed one.
+
+Class indices follow the alphabetical folder order of `ImageFolder`, not the order of the command: Baroque 0, Cubism 1, Impressionism 2, Pop_Art 3, Ukiyo_e 4 (the `classes` list in `subset_info.json`).
