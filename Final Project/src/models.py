@@ -9,7 +9,7 @@ class MLP(nn.Module):
 
     def __init__(self, n_in, n_classes=5, width=512, depth=2, activation=nn.ReLU, dropout=0.0):
         super().__init__()
-        layers, n = [nn.Flatten()], n_in
+        layers, n = [nn.Flatten()], n_in   # Flatten: (N, 3, H, W) images -> (N, 3 * H * W) vectors
         for _ in range(depth):
             layers += [nn.Linear(n, width), activation()]
             if dropout > 0:
