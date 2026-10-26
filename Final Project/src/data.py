@@ -37,6 +37,7 @@ def load_splits(normalisation="train", size=128, seed=0, data_dir=DATA_DIR):
 
     normalisation="train": mean and std of the training images only (MLP, baseline).
     normalisation="imagenet": the statistics the pretrained ResNet was trained with.
+    normalisation="none": pixels kept in [0, 1] (hand-crafted features such as colour histograms).
     Returns {"train": (X, y), "val": (X, y), "test": (X, y)} and the class names.
     """
     X, y, classes = load_images(data_dir, size)
@@ -48,6 +49,8 @@ def load_splits(normalisation="train", size=128, seed=0, data_dir=DATA_DIR):
         std = X[train_idx].std(dim=(0, 2, 3), keepdim=True)
     elif normalisation == "imagenet":
         mean, std = IMAGENET_MEAN, IMAGENET_STD
+    elif normalisation == "none":
+        mean, std = 0.0, 1.0
     else:
         raise ValueError(f"unknown normalisation: {normalisation}")
     X = (X - mean) / std
