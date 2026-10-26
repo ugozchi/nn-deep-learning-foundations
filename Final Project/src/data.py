@@ -6,6 +6,9 @@ train / val / test images. From a notebook in `notebooks/`:
     import sys; sys.path.append("..")
     from src.data import make_loaders
     train_loader, val_loader, test_loader, classes = make_loaders("train", size=64)
+
+`augment=True` flips half of the training images left-right at each epoch (a mirrored painting keeps
+its style): more variety for the ResNet, which has 1 050 training images only.
 """
 from pathlib import Path
 
@@ -25,14 +28,14 @@ IMAGENET_STD = torch.tensor([0.229, 0.224, 0.225]).view(1, 3, 1, 1)
 def load_images(data_dir=DATA_DIR, size=128):
     """Every image as a (N, 3, size, size) tensor in [0, 1], the labels (N,) and the class names."""
     folder = datasets.ImageFolder(data_dir)            # one sub-folder per style, classes sorted by name
-    X = torch.stack([pil_to_tensor(img) for img, _ in folder]).float() / 255
+    X = torch.stack([pil_to_tensor(img) for img, _ in folder]).float().div_(255)
     if size != X.shape[-1]:
         X = F.interpolate(X, size=size, mode="bilinear", antialias=True, align_corners=False)
     y = torch.tensor(folder.targets)
     return X, y, folder.classes
 
 
-def load_splits(normalisation="train", size=128, seed=0, data_dir=DATA_DIR):
+def load_splits(normalisation="train", size=128, seed=0, data_dir=DATA_DIR, verbose=True):
     """Stratified 70 / 15 / 15 split, normalised per colour channel.
 
     normalisation="train": mean and std of the training images only (MLP, baseline).
@@ -45,29 +48,48 @@ def load_splits(normalisation="train", size=128, seed=0, data_dir=DATA_DIR):
     val_idx, test_idx = train_test_split(rest_idx, test_size=0.5, stratify=y[rest_idx], random_state=seed)
 
     if normalisation == "train":
-        mean = X[train_idx].mean(dim=(0, 2, 3), keepdim=True)    # statistics of the TRAINING images only
-        std = X[train_idx].std(dim=(0, 2, 3), keepdim=True)
+        X_train = X[train_idx]                                    # statistics of the TRAINING images only
+        mean = X_train.mean(dim=(0, 2, 3), keepdim=True)
+        std = X_train.std(dim=(0, 2, 3), keepdim=True)
+        del X_train
     elif normalisation == "imagenet":
         mean, std = IMAGENET_MEAN, IMAGENET_STD
     elif normalisation == "none":
-        mean, std = 0.0, 1.0
+        mean, std = None, None
     else:
         raise ValueError(f"unknown normalisation: {normalisation}")
-    X = (X - mean) / std
+    if mean is not None:
+        X.sub_(mean).div_(std)                                    # in place: no extra copy of the images
 
     splits = {"train": (X[train_idx], y[train_idx]),
               "val": (X[val_idx], y[val_idx]),
               "test": (X[test_idx], y[test_idx])}
-    for name, (_, y_split) in splits.items():
-        counts = torch.bincount(y_split, minlength=len(classes)).tolist()
-        print(f"{name:5s} {len(y_split):4d} images | per class {dict(zip(classes, counts))}")
+    if verbose:
+        for name, (_, y_split) in splits.items():
+            counts = torch.bincount(y_split, minlength=len(classes)).tolist()
+            print(f"{name:5s} {len(y_split):4d} images | per class {dict(zip(classes, counts))}")
     return splits, classes
 
 
-def make_loaders(normalisation="train", size=128, batch_size=64, seed=0, data_dir=DATA_DIR):
-    """The train / val / test DataLoaders (only the training one is shuffled) and the class names."""
-    splits, classes = load_splits(normalisation, size, seed, data_dir)
-    train_loader = DataLoader(TensorDataset(*splits["train"]), batch_size=batch_size, shuffle=True)
+class FlipDataset(TensorDataset):
+    """A TensorDataset whose images are flipped left-right half of the time (training augmentation)."""
+
+    def __getitem__(self, i):
+        x, y = super().__getitem__(i)
+        if torch.rand(1).item() < 0.5:                            # drawn from torch's seed: reproducible
+            x = x.flip(-1)
+        return x, y
+
+
+def make_loaders(normalisation="train", size=128, batch_size=64, seed=0, data_dir=DATA_DIR,
+                 augment=False, verbose=True):
+    """The train / val / test DataLoaders (only the training one is shuffled) and the class names.
+
+    augment=True: random left-right flips of the training images; val and test are never augmented.
+    """
+    splits, classes = load_splits(normalisation, size, seed, data_dir, verbose)
+    train_set = (FlipDataset if augment else TensorDataset)(*splits["train"])
+    train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True)
     val_loader = DataLoader(TensorDataset(*splits["val"]), batch_size=256)
     test_loader = DataLoader(TensorDataset(*splits["test"]), batch_size=256)
     return train_loader, val_loader, test_loader, classes
