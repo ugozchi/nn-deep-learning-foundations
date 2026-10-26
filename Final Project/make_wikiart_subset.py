@@ -380,7 +380,7 @@ def write_metadata(plan, index, label, class_ids, class_names, args, sizes) -> C
         "command": "python " + " ".join([Path(sys.argv[0]).name] + sys.argv[1:]),
         "created_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
     }
-    (args.out / "subset_info.json").write_text(json.dumps(info, indent=2), encoding="utf-8")
+    (args.out / "subset_info.json").write_text(json.dumps(info, indent=2) + "\n", encoding="utf-8")
     return counts
 
 
