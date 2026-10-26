@@ -39,7 +39,7 @@ Final Project/
 
 ## Data
 
-The data comes from the `huggan/wikiart` dataset on the Hugging Face Hub, through `make_wikiart_subset.py`. **WikiArt images must not be committed**: we commit the script, the exact command and `subset_info.json`.
+The data comes from the `huggan/wikiart` dataset on the Hugging Face Hub, through `make_wikiart_subset.py`. **WikiArt images must not be committed**: we commit the script, the exact command and `subset_info.json`. The only paintings in the repository are the 12 small thumbnails of `results/diagnosis_errors.png` (also in the output of the `diagnosis` notebook and on slide 9), which show the most confident errors of the ResNet. The repository is private, shared with the team and the teachers.
 
 We classify paintings by **style**, with five visually contrasted movements: **Impressionism, Baroque, Cubism, Ukiyo-e and Pop Art**, 300 images each, 128 × 128 px. Style is what the guide needs to tell the story of a movement. These five differ in palette, brushwork and composition, so the task can be learnt from 1 500 images, and there is still room for a gap between a classical model and a CNN.
 
