@@ -41,7 +41,7 @@ Slides 10 and 11 are completed with the CPU benchmark (#9) and the recommendatio
 - *Why a smaller learning rate for the pretrained weights?* The new head starts from random weights and must learn fast (1e-3). The pretrained weights are already good, so we only adjust them (1e-4) instead of destroying them.
 - *Why does fine-tuning overfit after 3 epochs?* 11 million weights adapted on 1 050 paintings: the training accuracy reaches 0.98 within 7 epochs. Early stopping keeps the weights of epoch 3.
 - *Why is a logistic regression on the features almost as good?* The ImageNet features already separate the styles. A linear model on top is enough, and it is the same model as the "head only" variant, trained differently.
-- *Why 128 pixels and not 224?* Our subset is stored at 128 pixels. 224 is the ImageNet resolution and might add a few points. It has 3 times more pixels, and the benchmark measures 2.1 times the CPU time per painting (9.5 ms against 4.6 ms on one thread). We did not train at 224: it is a lever to try.
+- *Why 128 pixels and not 224?* Our subset is stored at 128 pixels. 224 is the ImageNet resolution and might add a few points. It has 3 times more pixels, and the benchmark measures 2.1 times the CPU time per painting (9.7 ms against 4.6 ms on one thread). We did not train at 224: it is a lever to try.
 
 **Production**
 

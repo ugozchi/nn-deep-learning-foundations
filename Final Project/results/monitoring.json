@@ -9,25 +9,25 @@
     },
     "lr = 0.0001": {
       "train_loss_epoch_1": 1.5437524620691936,
-      "train_loss_epoch_30": 0.08235662464584623,
-      "min_val_loss": 1.4503331184387207,
+      "train_loss_epoch_30": 0.07777295451079096,
+      "min_val_loss": 1.4503389596939087,
       "min_val_loss_epoch": 4,
       "val_acc_at_min": 0.4
     },
     "lr = 0.01": {
-      "train_loss_epoch_1": 10.293890184674945,
-      "train_loss_epoch_30": 1.389067045847575,
-      "min_val_loss": 1.522534966468811,
-      "min_val_loss_epoch": 21,
-      "val_acc_at_min": 0.3422222222222222
+      "train_loss_epoch_1": 10.293890196255274,
+      "train_loss_epoch_30": 1.4374375770205543,
+      "min_val_loss": 1.493048071861267,
+      "min_val_loss_epoch": 11,
+      "val_acc_at_min": 0.36444444444444446
     }
   },
   "gradient_norms": {
     "ReLU": {
       "median_per_layer": [
         0.7139848470687866,
-        0.5127174258232117,
-        0.521092414855957,
+        0.5127173662185669,
+        0.5210923552513123,
         0.6404891014099121
       ],
       "last_over_first": 0.8970625973917989
