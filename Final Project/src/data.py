@@ -28,8 +28,10 @@ IMAGENET_STD = torch.tensor([0.229, 0.224, 0.225]).view(1, 3, 1, 1)
 def load_images(data_dir=DATA_DIR, size=128):
     """Every image as a (N, 3, size, size) tensor in [0, 1], the labels (N,) and the class names."""
     folder = datasets.ImageFolder(data_dir)            # one sub-folder per style, classes sorted by name
+    # pil_to_tensor gives uint8 pixels in 0..255; dividing by 255 puts them in [0, 1]
     X = torch.stack([pil_to_tensor(img) for img, _ in folder]).float().div_(255)
     if size != X.shape[-1]:
+        # antialias: average the neighbouring pixels when shrinking, instead of skipping some of them
         X = F.interpolate(X, size=size, mode="bilinear", antialias=True, align_corners=False)
     y = torch.tensor(folder.targets)
     return X, y, folder.classes
@@ -37,6 +39,7 @@ def load_images(data_dir=DATA_DIR, size=128):
 
 def split_indices(y, seed=0):
     """Stratified 70 / 15 / 15 split of the indices 0 .. N-1 (the ImageFolder order): train, val, test."""
+    # stratify: every split keeps the same share of each style; random_state: the same split every time
     train_idx, rest_idx = train_test_split(np.arange(len(y)), test_size=0.3, stratify=y, random_state=seed)
     val_idx, test_idx = train_test_split(rest_idx, test_size=0.5, stratify=y[rest_idx], random_state=seed)
     return train_idx, val_idx, test_idx

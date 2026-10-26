@@ -30,6 +30,7 @@ def train_one_epoch(model, loader, loss_fn, optimizer, device="cpu"):
         optimizer.zero_grad()              # 3. reset the gradients
         loss.backward()                    # 4. backward
         optimizer.step()                   # 5. update
+        # the loss is a mean over the batch: weighted by the batch size here, divided by n at the end
         total += loss.item() * len(yb)
         correct += (logits.argmax(dim=1) == yb).sum().item()
         n += len(yb)
@@ -80,7 +81,7 @@ def fit(model, train_loader, val_loader, loss_fn, optimizer, n_epochs, patience=
 
         if val_loss < best_loss:           # early stopping (TP06): remember the best weights
             best_loss, best_epoch, wait = val_loss, epoch, 0
-            best_state = copy.deepcopy(model.state_dict())
+            best_state = copy.deepcopy(model.state_dict())   # a copy: the weights keep changing afterwards
         else:
             wait += 1
             if patience is not None and wait >= patience:

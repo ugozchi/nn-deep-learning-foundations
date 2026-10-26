@@ -44,7 +44,7 @@
     "lr_head": 0.001,
     "lr_backbone": 0.0001,
     "n_params": 11179077,
-    "train_time_s": 10.506646084133536,
+    "train_time_s": 10.64700850006193,
     "best_epoch": 3,
     "device": "mps",
     "history": {
@@ -99,7 +99,7 @@
         0.001
       ],
       "best_epoch": 3,
-      "train_time_s": 10.506646084133536
+      "train_time_s": 10.64700850006193
     }
   },
   "logreg_features": {
@@ -145,7 +145,7 @@
     "C": 0.001,
     "val_accuracy": 0.7333333333333333,
     "n_params": 2565,
-    "train_time_s": 0.3770783331710845
+    "train_time_s": 0.3804657091386616
   },
   "variants": {
     "head only": {
@@ -153,7 +153,7 @@
       "val_acc_std": 0.003628873693012094,
       "gap": 0.1415873015873016,
       "best_epoch": 10.666666666666666,
-      "train_time_s": 7.776521805285786,
+      "train_time_s": 7.8141488753414405,
       "n_trainable": 2565
     },
     "layer4 + head": {
@@ -161,7 +161,7 @@
       "val_acc_std": 0.024162231748592743,
       "gap": 0.19153439153439153,
       "best_epoch": 2.6666666666666665,
-      "train_time_s": 5.033759166719392,
+      "train_time_s": 5.089908236327271,
       "n_trainable": 8396293
     },
     "whole network": {
@@ -169,7 +169,7 @@
       "val_acc_std": 0.014665918424609879,
       "gap": 0.155978835978836,
       "best_epoch": 4.0,
-      "train_time_s": 11.81918688886799,
+      "train_time_s": 12.007518027598659,
       "n_trainable": 11179077
     }
   }
