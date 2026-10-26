@@ -67,6 +67,7 @@ Set up the environment of the [root README](../README.md), then `pip install -r 
 | 3 | [`resnet`](notebooks/resnet.ipynb) | pretrained ResNet-18: head only, fine-tuning, features + logistic regression | `resnet.json`, `resnet_*.png`, `resnet.pt` | 1.5 min on GPU |
 | 4 | [`monitoring`](notebooks/monitoring.ipynb) | learning rate, gradient norm per layer, activations | `monitoring.json`, `monitoring_*.png` | 10 s |
 | 5 | [`diagnosis`](notebooks/diagnosis.ipynb) | each failure: symptom, diagnosis, fix, measured effect | `diagnosis.csv`, `diagnosis_*.png` | 20 s |
+| 6 | [`benchmark`](notebooks/benchmark.ipynb) | CPU time per painting on one thread, parameters, model size | `benchmark.csv`, `benchmark.png` | 40 s |
 
 Times measured on an Apple M4 Pro laptop. In Jupyter, use *Restart & Run All*; from the command line:
 
@@ -77,6 +78,7 @@ jupyter nbconvert --to notebook --execute --inplace --ExecutePreprocessor.timeou
 
 - `resnet` trains on the first device available: a CUDA GPU, the Apple GPU (MPS), else the CPU, where one epoch is about 8 times slower. Its first run downloads the ImageNet weights of ResNet-18 (45 MB) into the PyTorch cache. The other notebooks run on the CPU.
 - The weights `mlp.pt` and `resnet.pt` are git-ignored. `diagnosis` loads `resnet.pt`, so run `resnet` first.
+- `benchmark` needs neither the data nor the weights: a model's time and size only depend on its architecture, read from the json files of `results/`. It loads `mlp.pt` and `resnet.pt` when they exist.
 - Every notebook fixes its seeds: running one twice on the same machine gives the same numbers (checked for each of them). On another device, the ResNet numbers may differ slightly.
 
 ## Results
