@@ -76,7 +76,7 @@ jupyter nbconvert --to notebook --execute --inplace --ExecutePreprocessor.timeou
 ```
 
 - `resnet` trains on the first device available: a CUDA GPU, the Apple GPU (MPS), else the CPU, where one epoch is about 8 times slower. Its first run downloads the ImageNet weights of ResNet-18 (45 MB) into the PyTorch cache. The other notebooks run on the CPU.
-- The weights `mlp.pt` and `resnet.pt` are git-ignored. `diagnosis` loads them, so run `mlp` and `resnet` first.
+- The weights `mlp.pt` and `resnet.pt` are git-ignored. `diagnosis` loads `resnet.pt`, so run `resnet` first.
 - Every notebook fixes its seeds: running one twice on the same machine gives the same numbers (checked for each of them). On another device, the ResNet numbers may differ slightly.
 
 ## Results
