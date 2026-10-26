@@ -57,6 +57,7 @@ Slides 10 and 11 show the CPU benchmark (#9) and the recommendation (#10). Two t
 - *What does the guide do when it is unsure?* The ResNet is less confident when it is wrong (0.72 against 0.87). With a threshold of 0.7 it answers 78 % of the paintings and is right on 87 % of them. In production, the threshold must be set on the validation set.
 - *What about the natural-language search of the brief?* It was outside the three deliverables (stretch issue #13). A text–image model such as CLIP would be the natural next step.
 - *Is it reproducible?*
-  - Seeds are fixed, and every notebook gives the same numbers when re-run.
+  - Seeds are fixed, and every notebook gives the same numbers when re-run on the same machine.
+  - On another machine the two networks move by about one point (MLP 0.431 instead of 0.440, ResNet 0.796 instead of 0.804, from a fresh clone on another laptop), within the ± 3 points of the test set. The logistic regressions give exactly the same numbers.
   - The README gives the order and the commands.
   - A teammate reproduces the results from a fresh clone (#12).

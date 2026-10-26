@@ -81,7 +81,7 @@ jupyter nbconvert --to notebook --execute --inplace --ExecutePreprocessor.timeou
 - The weights `mlp.pt` and `resnet.pt` are git-ignored. `diagnosis` loads `resnet.pt`, so run `resnet` first.
 - `benchmark` runs the trained models on the real test paintings, so it needs the data and `mlp.pt` and `resnet.pt`: run `mlp` and `resnet` first. It refits the logistic regressions with the settings saved in `results/`, and checks that classifying one painting at a time gives the accuracies of the other notebooks.
 - `recommendation` only reads `results/`: it needs neither the data nor the weights.
-- Every notebook fixes its seeds: running one twice on the same machine gives the same numbers (checked for each of them). On another device, the ResNet numbers may differ slightly.
+- Every notebook fixes its seeds: running one twice on the same machine gives the same numbers (checked for each of them). On another machine, the two networks can move by about one point. From a fresh clone on an Apple M4 Pro, the MLP gives 0.431 and the fine-tuned ResNet 0.796, against 0.440 and 0.804 in `results/` (Apple M5 Pro). The logistic regressions, including the one on the ResNet features, give exactly the same numbers. One point is well within the ± 3 points of the test set, and no conclusion changes.
 
 ## Results
 
