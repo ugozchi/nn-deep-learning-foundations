@@ -1,5 +1,7 @@
 """The networks of the project, built from PyTorch layers."""
+import torch
 import torch.nn as nn
+from torchvision.models import ResNet18_Weights, resnet18
 
 
 class MLP(nn.Module):
@@ -18,6 +20,30 @@ class MLP(nn.Module):
 
     def forward(self, x):
         return self.layers(x)              # raw logits: nn.CrossEntropyLoss applies the softmax
+
+
+class ResNetClassifier(nn.Module):
+    """ResNet-18 pretrained on ImageNet, with a new head (random weights) of n_classes outputs."""
+
+    def __init__(self, n_classes=5):
+        super().__init__()
+        self.resnet = resnet18(weights=ResNet18_Weights.DEFAULT)
+        self.resnet.fc = nn.Linear(self.resnet.fc.in_features, n_classes)
+
+    def train(self, mode=True):
+        # fit() calls model.train(): we stay in eval mode so that batch norm keeps its ImageNet
+        # statistics, as in TP07 (ResNet-18 has no dropout, so nothing else changes)
+        return super().train(False)
+
+    def forward(self, x):
+        return self.resnet(x)
+
+    def features(self, x):
+        """The 512 features of the last average pooling, just before the head."""
+        r = self.resnet
+        x = r.maxpool(r.relu(r.bn1(r.conv1(x))))
+        x = r.layer4(r.layer3(r.layer2(r.layer1(x))))
+        return torch.flatten(r.avgpool(x), 1)
 
 
 def count_parameters(model, trainable_only=False):
