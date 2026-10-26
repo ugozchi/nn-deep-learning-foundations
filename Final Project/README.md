@@ -7,7 +7,7 @@ We are the AI team of a (fictional) mid-sized French fine-arts museum. The Museu
 
 The director also wants a clear recommendation: the kiosks run on modest CPUs, the team is small and the budget is limited. **Is a neural network worth it in production, or would a simpler classical model do the job?**
 
-Full brief: [`consign.txt`](consign.txt). Deadline: **30 October 2026** (Git repository + 10 min presentation + 5 min Q&A).
+Full brief: [`consign.md`](consign.md). Deadline: **30 October 2026** (Git repository + 10 min presentation + 5 min Q&A).
 
 ## Deliverables
 
@@ -23,7 +23,7 @@ Work is tracked in the GitHub issues and milestones.
 
 ```
 Final Project/
-├── consign.txt              project brief
+├── consign.md               project brief
 ├── make_wikiart_subset.py   builds the WikiArt subset (provided)
 ├── requirements.txt
 ├── src/                     shared code: data loading, models, training loop, metrics
