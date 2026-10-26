@@ -6,7 +6,7 @@ Slides: [`museum_guide.pptx`](museum_guide.pptx), 11 slides for 10 minutes, with
 
 | Part | Slides | Topic | Speaker | Time |
 | --- | --- | --- | --- | --- |
-| 1 | 1–4 | The question, the data, the classical baselines | Fefe | 3 min |
+| 1 | 1–4 | The question, the data, the classical baselines | Féliz | 3 min |
 | 2 | 5–7 | The MLP, monitoring, diagnosis | Ugo | 3 min 30 |
 | 3 | 8–11 | The ResNet, the errors, the cost, the recommendation | Thomas | 3 min 30 |
 
