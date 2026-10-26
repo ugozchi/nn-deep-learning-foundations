@@ -52,7 +52,7 @@ python make_wikiart_subset.py --label style \
     --per-class 300 --size 128 --out data/wikiart_style5
 ```
 
-The seed and the dataset revision are pinned, so everybody gets the same images. Check that your `data/wikiart_style5/subset_info.json` has the same `counts` and `shards` as the committed one.
+The seed and the dataset revision are pinned, so everybody gets the same images. Check that your `data/wikiart_style5/subset_info.json` has the same `counts` and `shards` as the committed one. The build rewrites this file with a new `created_utc`: do not commit it, `git checkout -- data/wikiart_style5/subset_info.json` restores the committed one.
 
 Class indices follow the alphabetical folder order of `ImageFolder`, not the order of the command: Baroque 0, Cubism 1, Impressionism 2, Pop_Art 3, Ukiyo_e 4 (the `classes` list in `subset_info.json`).
 
