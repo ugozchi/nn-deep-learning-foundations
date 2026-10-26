@@ -10,6 +10,7 @@
 import copy
 import json
 import time
+import warnings
 from pathlib import Path
 
 import torch
@@ -54,9 +55,12 @@ def fit(model, train_loader, val_loader, loss_fn, optimizer, n_epochs, patience=
     """Train for n_epochs, then reload the weights of the epoch with the lowest validation loss.
 
     patience: stop when the validation loss has not improved for `patience` epochs (None: never stop early).
+    scheduler: stepped once per epoch, with the validation loss if it is a ReduceLROnPlateau.
     Returns the history: one value per epoch, plus the best epoch and the training time in seconds.
+    best_epoch is 0 if the validation loss was never finite (e.g. NaN): the last weights are kept.
     """
     torch.manual_seed(seed)                # same order of the mini-batches for every run
+    model.to(device)
     history = {"train_loss": [], "train_acc": [], "val_loss": [], "val_acc": [], "lr": []}
     best_loss, best_state, best_epoch, wait = float("inf"), None, 0, 0
     start = time.perf_counter()
@@ -66,7 +70,9 @@ def fit(model, train_loader, val_loader, loss_fn, optimizer, n_epochs, patience=
         history["train_loss"].append(train_loss); history["train_acc"].append(train_acc)
         history["val_loss"].append(val_loss); history["val_acc"].append(val_acc)
         history["lr"].append(optimizer.param_groups[0]["lr"])
-        if scheduler is not None:
+        if isinstance(scheduler, torch.optim.lr_scheduler.ReduceLROnPlateau):
+            scheduler.step(val_loss)       # this one needs the metric it watches
+        elif scheduler is not None:
             scheduler.step()
         if verbose:
             print(f"epoch {epoch:3d} | train loss {train_loss:.3f} acc {train_acc:.3f} | "
@@ -79,7 +85,10 @@ def fit(model, train_loader, val_loader, loss_fn, optimizer, n_epochs, patience=
             wait += 1
             if patience is not None and wait >= patience:
                 break
-    model.load_state_dict(best_state)
+    if best_state is not None:
+        model.load_state_dict(best_state)
+    else:                                  # NaN from the first epoch (learning rate too high?)
+        warnings.warn("the validation loss was never finite: keeping the last weights")
     history["best_epoch"] = best_epoch
     history["train_time_s"] = time.perf_counter() - start
     return history
