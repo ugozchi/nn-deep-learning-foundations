@@ -35,6 +35,13 @@ def load_images(data_dir=DATA_DIR, size=128):
     return X, y, folder.classes
 
 
+def split_indices(y, seed=0):
+    """Stratified 70 / 15 / 15 split of the indices 0 .. N-1 (the ImageFolder order): train, val, test."""
+    train_idx, rest_idx = train_test_split(np.arange(len(y)), test_size=0.3, stratify=y, random_state=seed)
+    val_idx, test_idx = train_test_split(rest_idx, test_size=0.5, stratify=y[rest_idx], random_state=seed)
+    return train_idx, val_idx, test_idx
+
+
 def load_splits(normalisation="train", size=128, seed=0, data_dir=DATA_DIR, verbose=True):
     """Stratified 70 / 15 / 15 split, normalised per colour channel.
 
@@ -44,8 +51,7 @@ def load_splits(normalisation="train", size=128, seed=0, data_dir=DATA_DIR, verb
     Returns {"train": (X, y), "val": (X, y), "test": (X, y)} and the class names.
     """
     X, y, classes = load_images(data_dir, size)
-    train_idx, rest_idx = train_test_split(np.arange(len(y)), test_size=0.3, stratify=y, random_state=seed)
-    val_idx, test_idx = train_test_split(rest_idx, test_size=0.5, stratify=y[rest_idx], random_state=seed)
+    train_idx, val_idx, test_idx = split_indices(y, seed)
 
     if normalisation == "train":
         X_train = X[train_idx]                                    # statistics of the TRAINING images only
